@@ -57,4 +57,6 @@ class CartNotifier extends StateNotifier<Map<String, CartModel>> {
       };
     }
   }
+
+  Map<String, CartModel> get getCartItem => state;
 }
