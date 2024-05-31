@@ -47,4 +47,7 @@ class FavoriteNotifier extends StateNotifier<Map<String, FavoriteModel>> {
 
     state = {...state};
   }
+
+  //retrive valuefrom thestate object
+  Map<String, FavoriteModel> get getFavoriteItem => state;
 }
