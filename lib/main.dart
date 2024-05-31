@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:multi_shop/controllers/category_controller.dart';
+import 'package:multi_shop/views/screens/authentication_screens/login_screen.dart';
 import 'package:multi_shop/views/screens/main_screen.dart';
 
 void main() async {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MainScreen(),
+      home: LoginScreen(),
       initialBinding: BindingsBuilder(
         () {
           Get.put<CategoryController>(CategoryController());
