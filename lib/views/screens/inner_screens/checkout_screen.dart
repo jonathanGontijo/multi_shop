@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_shop/provider/cart_provider.dart';
+import 'package:multi_shop/views/screens/inner_screens/shipping_addreess_screen.dart';
 import 'package:multi_shop/views/screens/main_screen.dart';
 import 'package:uuid/uuid.dart';
 
@@ -35,7 +36,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const ShippingAddreessScreen();
+                      },
+                    ),
+                  );
+                },
                 child: SizedBox(
                   width: 335,
                   height: 74,
