@@ -317,7 +317,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             Align(
               alignment: const Alignment(-0.63, -0.26),
               child: Text(
-                'Subtototal',
+                'Subtotal',
                 style: GoogleFonts.roboto(
                   color: const Color(
                     0xFFA1A1A1,
