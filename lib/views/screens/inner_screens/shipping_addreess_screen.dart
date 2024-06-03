@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 class ShippingAddreessScreen extends StatefulWidget {
@@ -110,6 +110,11 @@ class _ShippingAddreessScreenState extends State<ShippingAddreessScreen> {
                 'state': state,
                 'city': city,
                 'locality': locality,
+              }).whenComplete(() {
+                Navigator.of(context).pop();
+                setState(() {
+                  _formKey.currentState!.validate();
+                });
               });
             } else {
               //we can show a snacbar
