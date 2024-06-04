@@ -2,13 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_shop/views/screens/inner_screens/order_detail_screen.dart';
 
 class OrderScreen extends StatelessWidget {
-  const OrderScreen({super.key});
+  OrderScreen({super.key});
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> _ordersStream = FirebaseFirestore.instance
+    final Stream<QuerySnapshot> ordersStream = FirebaseFirestore.instance
         .collection('orders')
         .where('buyerId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots();
@@ -64,19 +67,33 @@ class OrderScreen extends StatelessWidget {
           ),
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: _ordersStream,
+          stream: ordersStream,
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return Text('Something went wrong');
+              return const Text('Something went wrong');
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading");
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (snapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text(
+                  'You have no order',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
             }
 
             return ListView.builder(
-                itemCount: snapshot.data!.size,
+                itemCount: snapshot.data!.docs.length,
                 itemBuilder: ((context, index) {
                   final orderData = snapshot.data!.docs[index];
                   return Padding(
@@ -86,16 +103,16 @@ class OrderScreen extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
-                        /*  Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return OrderDetail(
+                              return OrderDetailScreen(
                                 orderData: orderData,
                               );
                             },
                           ),
-                        ); */
+                        );
                       },
                       child: Container(
                         width: 335,
@@ -327,7 +344,12 @@ class OrderScreen extends StatelessWidget {
                                         left: 0,
                                         top: 0,
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: () async {
+                                            await _firestore
+                                                .collection('orders')
+                                                .doc(orderData['orderId'])
+                                                .delete();
+                                          },
                                           child: Image.asset(
                                             'assets/icons/delete.png',
                                             width: 20,

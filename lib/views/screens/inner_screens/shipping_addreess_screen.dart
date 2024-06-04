@@ -129,7 +129,7 @@ class _ShippingAddreessScreenState extends State<ShippingAddreessScreen> {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 'Add Address',
                 style: TextStyle(

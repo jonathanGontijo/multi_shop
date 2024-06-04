@@ -351,7 +351,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return CheckoutScreen();
+                        return const CheckoutScreen();
                       },
                     ),
                   );
