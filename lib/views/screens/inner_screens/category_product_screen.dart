@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_shop/models/category_models.dart';
+import 'package:multi_shop/views/screens/nav_screens/widgets/popular_item.dart';
 
 class CategoryProductScreen extends StatelessWidget {
   const CategoryProductScreen({super.key, required this.categoryModel});
@@ -51,16 +51,20 @@ class CategoryProductScreen extends StatelessWidget {
           }
 
           return GridView.count(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              crossAxisCount: 3,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
-              childAspectRatio: 300 / 500,
-              children: List.generate(snapshot.data!.size, (index) {
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 15,
+            childAspectRatio: 300 / 500,
+            children: List.generate(
+              snapshot.data!.size,
+              (index) {
                 final productData = snapshot.data!.docs[index];
-                return Text(productData['productName']);
-              }));
+                return PopularItem(productData: productData);
+              },
+            ),
+          );
         },
       ),
     );
