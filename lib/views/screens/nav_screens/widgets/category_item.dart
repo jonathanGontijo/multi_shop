@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_shop/controllers/category_controller.dart';
+import 'package:multi_shop/views/screens/inner_screens/category_product_screen.dart';
 
 class CategoryItem extends StatefulWidget {
   const CategoryItem({super.key});
@@ -29,7 +30,13 @@ class _CategoryItemState extends State<CategoryItem> {
             ),
             itemBuilder: (context, index) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return CategoryProductScreen(
+                      categoryModel: _categoryController.categories[index],
+                    );
+                  }));
+                },
                 child: Column(
                   children: [
                     Image.network(
