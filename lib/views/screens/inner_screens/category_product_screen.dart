@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_shop/models/category_models.dart';
@@ -9,53 +10,58 @@ class CategoryProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> _productStream = FirebaseFirestore.instance
+        .collection('product')
+        .where('category', isEqualTo: categoryModel.categoryName)
+        .snapshots();
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(
-          MediaQuery.of(context).size.height * 0.20,
-        ),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 118,
-          clipBehavior: Clip.hardEdge,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                'assets/icons/cartb.png',
-              ),
-              fit: BoxFit.cover,
-            ),
+      appBar: AppBar(
+        title: Text(
+          categoryModel.categoryName,
+          style: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
           ),
-          child: Stack(
-            children: [
-              Positioned(
-                left: 322,
-                top: 52,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      'assets/icons/not.png',
-                      width: 26,
-                      height: 25,
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 61,
-                top: 51,
-                child: Text(
-                  categoryModel.categoryName,
-                  style: GoogleFonts.lato(
-                    color: Colors.white,
+        ),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _productStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text(
+                'No Products under this category \ncheck back later',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.7),
+              ),
+            );
+          }
+
+          return GridView.count(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
+              childAspectRatio: 300 / 500,
+              children: List.generate(snapshot.data!.size, (index) {
+                final productData = snapshot.data!.docs[index];
+                return Text(productData['productName']);
+              }));
+        },
       ),
     );
   }
